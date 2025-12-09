@@ -1,0 +1,98 @@
+/* Ocultar barra de scroll estándar pero mantener la funcionalidad */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* --- ESCENARIO 3D --- */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    /* CAMBIO 1: Reducir altura total para que no toque los bordes extremos */
+    height: 80vh;
+    /* Centrar el contenedor verticalmente */
+    top: 50%;
+    transform: translateY(-50%);
+
+    perspective: 1000px;
+    overflow: hidden;
+
+    /* CAMBIO 2: Máscara más agresiva. Los bordes transparentes son más grandes (15%) */
+    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+}
+
+.carousel-wheel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: translate(-50%, -50%);
+}
+
+/* Las tarjetas ahora son absolutas, controladas por JS */
+.game-card-3d {
+    position: absolute;
+    /* CAMBIO 3: Hacerlas más delgadas y centrarlas */
+    width: 50%;
+    /* Solicitado: 75% */
+    left: 15.5%;
+    /* (100% - 75%) / 2 = 12.5% para centrar */
+
+    height: 29vh;
+    top: 50%;
+    margin-top: -17.5vh;
+
+    border-radius: 1rem;
+    background-size: cover;
+    background-position: center;
+    transition: box-shadow 0.3s, filter 0.3s, border-color 0.3s;
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    backface-visibility: hidden;
+}
+
+/* Efecto Overlay oscuro dentro de la tarjeta */
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.6) 100%);
+    transition: opacity 0.3s;
+}
+
+/* Texto dentro de la tarjeta */
+.card-content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    transform: translateZ(20px);
+    /* Un poco de relieve 3D al texto */
+}
+
+/* Animación del cursor parpadeante en el subtítulo */
+.cursor-blink {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}

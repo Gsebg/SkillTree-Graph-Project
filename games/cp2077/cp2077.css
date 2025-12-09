@@ -1,0 +1,656 @@
+/* games/cp2077/cp2077.css */
+
+/* Variables locales para el módulo */
+#cp2077-container {
+    --cp-bg: #050505;
+    --cp-red: #ea2e2e;
+    --cp-blue: #00f0ff;
+    --cp-yellow: #fcee0a;
+    --node-major: 60px;
+    --node-minor: 40px;
+
+    /* Propiedades de contenedor completo */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--cp-bg);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    /* Encima del launcher */
+
+    /* FONDO DEL JUEGO */
+    background-image: url('assets/fondo.jpg');
+    /* Asegúrate de que fondo.jpg esté en games/cp2077/assets/ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Botón de Salir (Nuevo) */
+#cp2077-exit-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--cp-red);
+    color: var(--cp-red);
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+#cp2077-exit-btn:hover {
+    background: var(--cp-red);
+    color: black;
+}
+
+/* --- Resto de tus estilos originales (Adaptados) --- */
+
+/* UI Puntos */
+#cp2077-container .points-display {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid var(--cp-blue);
+    border-left: 5px solid var(--cp-yellow);
+    padding: 10px 20px;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+#cp2077-container .points-display .label {
+    font-size: 10px;
+    color: var(--cp-blue);
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+#cp2077-container #points-count {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--cp-yellow);
+    text-shadow: 0 0 10px var(--cp-yellow);
+    line-height: 1;
+}
+
+/* Sidebar Nav (Iconos Izquierda) */
+#cp2077-container .sidebar-nav {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    z-index: 400;
+}
+
+#cp2077-container .tab-btn {
+    position: relative;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    opacity: 0.6;
+    filter: grayscale(0.8);
+}
+
+#cp2077-container .tab-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#cp2077-container .tab-btn:hover {
+    opacity: 1;
+    filter: grayscale(0);
+    transform: scale(1.1);
+}
+
+#cp2077-container .tab-btn.active {
+    opacity: 1;
+    filter: grayscale(0) drop-shadow(0 0 8px var(--cp-red));
+    transform: scale(1.15);
+}
+
+#cp2077-container .nav-label {
+    position: absolute;
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-20px);
+    background: var(--cp-yellow);
+    color: black;
+    font-weight: 900;
+    font-size: 14px;
+    padding: 5px 15px;
+    white-space: nowrap;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%, 0 20%);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease-out;
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+#cp2077-container .tab-btn:hover .nav-label {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Main Wrapper & Tree */
+#cp2077-container #main-tree-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+#cp2077-container .tree-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#cp2077-container #nodes-layer,
+#cp2077-container #connections-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1400px;
+    height: 850px;
+}
+
+#cp2077-container #nodes-layer {
+    z-index: 1;
+}
+
+#cp2077-container #connections-svg {
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Visual Guides */
+#cp2077-container .visual-tier-guide {
+    display: none;
+}
+
+/* Nodos */
+#cp2077-container .perk-node {
+    position: absolute;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    user-select: none;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    transition: transform 0.1s;
+}
+
+#cp2077-container .perk-icon {
+    object-fit: contain;
+    z-index: 3;
+    pointer-events: none;
+    display: block;
+}
+
+#cp2077-container .perk-node.state-blocked .perk-icon {
+    filter: grayscale(1) brightness(0.4);
+    opacity: 0.7;
+}
+
+#cp2077-container .perk-node.state-available .perk-icon {
+    filter: sepia(1) hue-rotate(180deg) saturate(2) brightness(0.8);
+}
+
+#cp2077-container .perk-node.state-selected .perk-icon {
+    filter: drop-shadow(0 0 2px var(--cp-yellow));
+}
+
+/* Tamaños */
+#cp2077-container .perk-node.type-major {
+    width: 80px;
+    height: 80px;
+    z-index: 5;
+}
+
+#cp2077-container .perk-node.type-minor {
+    width: 55px;
+    height: 55px;
+}
+
+#cp2077-container .perk-node.type-ultimate {
+    width: 140px;
+    height: 140px;
+    transform: translate(-50%, -50%);
+}
+
+#cp2077-container .perk-node:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    z-index: 100;
+}
+
+/* Icon Sizes Specifics */
+#cp2077-container .perk-node.type-minor .perk-icon {
+    width: 145%;
+    height: 145%;
+}
+
+#cp2077-container .perk-node.type-major .perk-icon {
+    width: 80%;
+    height: 80%;
+    margin-top: 2px;
+}
+
+#cp2077-container .perk-node.type-ultimate .perk-icon {
+    width: 65%;
+    height: 65%;
+}
+
+/* Counter */
+#cp2077-container .level-counter {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 10px;
+    font-weight: bold;
+    color: #aaa;
+    text-shadow: 1px 1px 0 #000;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#cp2077-container .perk-node.state-selected .level-counter {
+    color: var(--cp-yellow);
+}
+
+/* Cables SVG */
+#cp2077-container .cable-group {
+    transition: opacity 0.3s;
+}
+
+#cp2077-container .cable-bg {
+    fill: none;
+    stroke-width: 10px;
+    stroke: #333;
+    opacity: 0.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.3s, opacity 0.3s;
+}
+
+#cp2077-container .cable-separator {
+    fill: none;
+    stroke-width: 6px;
+    stroke: #050505;
+    stroke-linecap: butt;
+    stroke-linejoin: round;
+    opacity: 1;
+}
+
+#cp2077-container .cable-core {
+    fill: none;
+    stroke-width: 2px;
+    stroke: #333;
+    stroke-linecap: square;
+    opacity: 0.5;
+    transition: stroke 0.3s, opacity 0.3s;
+}
+
+#cp2077-container .cable-group.acquired .cable-bg {
+    stroke: var(--cp-yellow);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 5px var(--cp-yellow));
+}
+
+#cp2077-container .cable-group.acquired .cable-core {
+    stroke: var(--cp-yellow);
+    opacity: 1;
+    stroke-dasharray: 4 2;
+    animation: dashFlow 1s linear infinite;
+}
+
+#cp2077-container .cable-group.available .cable-bg {
+    stroke: var(--cp-blue);
+    opacity: 0.4;
+}
+
+#cp2077-container .cable-group.available .cable-core {
+    stroke: var(--cp-blue);
+    opacity: 0.8;
+}
+
+@keyframes dashFlow {
+    to {
+        stroke-dashoffset: -20;
+    }
+}
+
+/* Tooltip */
+#cp2077-tooltip {
+    position: fixed;
+    display: none;
+    background: rgba(10, 10, 10, 0.95);
+    border-left: 3px solid var(--cp-yellow);
+    color: white;
+    padding: 15px;
+    width: 280px;
+    z-index: 2000;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.8);
+}
+
+#cp2077-tooltip h3 {
+    margin: 0 0 10px 0;
+    color: var(--cp-blue);
+    text-transform: uppercase;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+}
+
+/* Presets & Reset UI */
+#cp2077-container #presets-container {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 600;
+}
+
+#cp2077-container #btn-presets {
+    background: black;
+    color: var(--cp-blue);
+    border: 1px solid var(--cp-blue);
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 0 100%);
+    transition: all 0.2s;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+#cp2077-container #btn-presets:hover {
+    background: var(--cp-blue);
+    color: black;
+}
+
+#cp2077-container #presets-menu {
+    display: none;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    width: 320px;
+    height: auto;
+    background: rgba(10, 10, 12, 0.98);
+    border: 1px solid var(--cp-yellow);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    padding: 5px 0;
+}
+
+#cp2077-container #presets-menu.open {
+    display: flex;
+}
+
+#cp2077-container .preset-item {
+    padding: 12px 20px;
+    color: #ddd;
+    cursor: pointer;
+    border-bottom: 1px solid #222;
+    font-size: 14px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#cp2077-container .preset-item:hover {
+    background: rgba(252, 238, 10, 0.15);
+    color: var(--cp-yellow);
+    padding-left: 30px;
+}
+
+#cp2077-container #reset-container {
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    z-index: 600;
+}
+
+#cp2077-container #btn-reset {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--cp-red);
+    color: var(--cp-red);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+#cp2077-container #btn-reset:hover {
+    background: var(--cp-red);
+    color: black;
+    transform: rotate(-90deg);
+    box-shadow: 0 0 20px var(--cp-red);
+}
+
+/* Preset Tooltip */
+#cp2077-preset-tooltip {
+    position: fixed;
+    display: none;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid var(--cp-blue);
+    color: white;
+    padding: 15px;
+    width: 300px;
+    z-index: 2000;
+    pointer-events: none;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#cp2077-preset-tooltip h4 {
+    color: var(--cp-blue);
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+}
+
+/* --- BOTÓN BUILD SUMMARY (Restaurado y Reposicionado) --- */
+#cp2077-container #summary-trigger {
+    position: fixed;
+    top: 20px;
+    /* Justo encima del botón Presets (que está en 30px + altura) */
+    left: 30px;
+    /* Alineado con Presets */
+    z-index: 600;
+}
+
+#cp2077-container #btn-summary {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--cp-blue);
+    color: var(--cp-blue);
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Forma Tech recortada */
+    clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+    transition: all 0.3s;
+}
+
+#cp2077-container #btn-summary svg {
+    width: 28px;
+    height: 28px;
+}
+
+#cp2077-container #btn-summary:hover {
+    background: var(--cp-blue);
+    color: black;
+    box-shadow: 0 0 20px var(--cp-blue);
+}
+
+/* --- PANEL DESLIZANTE (Restaurado) --- */
+#cp2077-container #summary-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 25%;
+    min-width: 300px;
+    height: 100vh;
+    background: rgba(10, 10, 12, 0.98);
+    border-right: 2px solid var(--cp-yellow);
+    z-index: 1000;
+    transform: translateX(-100%);
+    /* Oculto a la izquierda */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
+}
+
+#cp2077-container #summary-panel.open {
+    transform: translateX(0);
+}
+
+#cp2077-container .summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: black;
+    border-bottom: 1px solid #333;
+}
+
+#cp2077-container .summary-header h2 {
+    margin: 0;
+    color: var(--cp-yellow);
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+#cp2077-container .close-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+#cp2077-container .close-btn:hover {
+    color: white;
+}
+
+#cp2077-container .summary-tabs {
+    display: flex;
+    border-bottom: 1px solid #333;
+}
+
+#cp2077-container .s-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #888;
+    padding: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+#cp2077-container .s-tab.active {
+    color: var(--cp-blue);
+    background: rgba(0, 240, 255, 0.1);
+    border-bottom: 2px solid var(--cp-blue);
+}
+
+#cp2077-container .summary-content {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+#cp2077-container .summary-content.active {
+    display: block;
+}
+
+/* Estilos de items dentro del resumen */
+#cp2077-container .summary-item {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #333;
+    font-size: 13px;
+}
+
+#cp2077-container .sum-tree-name {
+    color: #666;
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+#cp2077-container .sum-perk-name {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#cp2077-container .sum-rank {
+    float: right;
+    color: var(--cp-yellow);
+}
+
+#cp2077-container .sum-desc {
+    color: #bbb;
+    margin-top: 5px;
+    line-height: 1.4;
+    font-size: 12px;
+}
+
+#cp2077-container .empty-msg {
+    color: #555;
+    text-align: center;
+    margin-top: 50px;
+    font-style: italic;
+}
