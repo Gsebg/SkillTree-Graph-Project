@@ -5,21 +5,21 @@ const GAMES_DB = [
     {
         id: 'cp2077',
         title: 'Cyberpunk 2077',
-        desc: 'Domina Night City. Árboles 2.0+',
+        desc: 'Rule Night City and rise to the big leagues',
         img: 'assets/covers/cover_cp2077.jpg',
         color: '#00f0ff' // Cyan Neón
     },
     {
         id: 'skyrim',
         title: 'The Elder Scrolls V',
-        desc: 'El camino del Dovahkiin.',
+        desc: 'The Path of the Dovahkiin',
         img: 'assets/covers/cover_skyrim.jpg',
         color: '#c0c0c0' // Plata
     },
     {
         id: 'acorigins',
         title: 'AC: Origins',
-        desc: 'El Credo Egipcio.',
+        desc: 'The Egyptian Creed',
         img: 'assets/covers/cover_acorigins.jpg',
         color: '#ffd700' // Dorado
     }
@@ -43,11 +43,11 @@ function initDynamicSubtitle() {
     if (!textElement) return;
 
     const phrases = [
-        "Crea tu build definitiva.",
-        "Encuentra las builds más meta.",
-        "Comparte tu configuración.",
-        "Optimiza tus estadísticas.",
-        "Explora el nexo de habilidades."
+        "Forge your ultimate build.",
+        "Discover the most meta-defining setups.",
+        "Share your unleashed configuration.",
+        "Maximize your stats like a pro.",
+        "Dive into the nexus of abilities."
     ];
     let phraseIndex = 0;
     let charIndex = 0;
@@ -215,30 +215,58 @@ function animateWheel() {
 // 5. CARGA DE MÓDULOS
 // =========================================
 window.loadGameModule = function (gameId) {
+
+    // Ocultar carrusel y mostrar loader si fuera necesario (lógica visual global)
+    // ...
+
     if (gameId === 'cp2077') {
-        // Cargar CSS
+        // --- LOGICA CYBERPUNK 2077 ---
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = 'games/cp2077/cp2077.css';
         link.id = 'cp2077-css';
         document.head.appendChild(link);
 
-        // Cargar Scripts en orden
         loadScriptsSequentially([
             'games/cp2077/skills_data.js',
             'games/cp2077/layout_config.js',
             'games/cp2077/presets_data.js',
             'games/cp2077/cp2077.js'
         ], () => {
-            // Iniciar Módulo
             if (typeof CP2077_Module !== 'undefined') {
                 CP2077_Module.init();
             } else {
                 alert("Error: No se pudo cargar el módulo CP2077.");
             }
         });
+
+    } else if (gameId === 'acorigins') {
+        // --- AQUÍ ESTÁ EL CAMBIO ---
+
+        // 1. Cargar CSS
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'games/acorigins/acorigins.css';
+        link.id = 'acorigins-css';
+        document.head.appendChild(link);
+
+        // 2. Cargar Scripts (AÑADIMOS layout_config.js)
+        loadScriptsSequentially([
+            'games/acorigins/skills_data.js',   // Datos base (generados por Python)
+            'games/acorigins/layout_config.js', // <--- ¡TU NUEVO ARCHIVO DE POSICIONES!
+            'games/acorigins/acorigins.js'      // Lógica
+        ], () => {
+            // 3. Iniciar
+            if (typeof ACOrigins_Module !== 'undefined') {
+                ACOrigins_Module.init();
+            } else {
+                console.error("Error: No se cargó ACOrigins_Module");
+            }
+        });
+
     } else {
-        alert("En desarrollo...");
+        // Otros juegos (Skyrim, etc.)
+        alert("En desarrollo... Próximamente.");
     }
 };
 

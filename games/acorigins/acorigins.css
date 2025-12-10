@@ -1,0 +1,315 @@
+/* games/acorigins/acorigins.css */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+:root {
+    --aco-gold: #ffd700;
+    --aco-gold-dim: #b89600;
+    --aco-blue: #152b45;
+    --aco-blue-light: #4c8dc9;
+    --aco-font: 'Cinzel', serif;
+}
+
+#acorigins-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    /* FONDO DE IMAGEN */
+    background-image: url('assets/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: 2000;
+    /* CAMBIO: Ocultar scrollbars definitivamente */
+    overflow: hidden;
+
+    font-family: var(--aco-font);
+    color: #fff;
+    user-select: none;
+    display: none;
+}
+
+/* CAPA DE OSCURIDAD Y BLUR (Overlay) */
+#acorigins-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* HUD elements z-index fixes */
+#aco-top-right,
+#aco-exit-btn,
+#aco-menu-btn,
+#aco-summary-panel {
+    position: fixed;
+    z-index: 2010;
+}
+
+#aco-summary-panel {
+    z-index: 3000;
+}
+
+/* --- HUD IZQUIERDO --- */
+#aco-exit-btn {
+    top: 40px;
+    left: 40px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: var(--aco-font);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.8;
+    transition: 0.3s;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+#aco-exit-btn:hover {
+    opacity: 1;
+    color: var(--aco-gold);
+    transform: translateX(-5px);
+}
+
+#aco-menu-btn {
+    top: 90px;
+    left: 40px;
+    width: 50px;
+    height: 50px;
+    background: rgba(21, 43, 69, 0.8);
+    border: 1px solid var(--aco-gold-dim);
+    color: var(--aco-gold);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#aco-menu-btn:hover {
+    background: var(--aco-blue);
+    border-color: var(--aco-gold);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--aco-gold-dim);
+}
+
+/* --- HUD DERECHO --- */
+#aco-top-right {
+    top: 40px;
+    right: 40px;
+    text-align: right;
+}
+
+.points-display {
+    font-size: 3rem;
+    color: var(--aco-gold);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.points-label {
+    font-size: 0.8rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.aco-btn-reset {
+    margin-top: 10px;
+    background: transparent;
+    border: 1px solid #444;
+    color: #ffffff;
+    padding: 5px 15px;
+    font-family: var(--aco-font);
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: 0.3s;
+}
+
+.aco-btn-reset:hover {
+    border-color: var(--aco-gold);
+    color: var(--aco-gold);
+}
+
+/* --- CANVAS & NODOS --- */
+#aco-canvas-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* CAMBIO: Ajustar exactamente a la ventana */
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    /* Quitamos el cursor grab ya que no habrá panning */
+    cursor: default;
+}
+
+#aco-svg-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.aco-node {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    z-index: 2;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--aco-blue);
+    border: 2px solid #3a506b;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    transition: transform 0.2s;
+}
+
+.aco-node:hover {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+.aco-icon {
+    font-size: 36px;
+    line-height: 1;
+    color: #556b80;
+    transition: color 0.3s;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.aco-node.state-available {
+    border-color: #fff;
+}
+
+.aco-node.state-available .aco-icon {
+    color: #ffffff;
+}
+
+.aco-node.state-selected {
+    background-color: var(--aco-gold);
+    border-color: #fff;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.aco-node.state-selected .aco-icon {
+    color: #000;
+    text-shadow: none;
+}
+
+/* --- PANEL LATERAL --- */
+#aco-summary-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 350px;
+    height: 100vh;
+    background: rgba(10, 14, 20, 0.98);
+    border-right: 1px solid var(--aco-gold-dim);
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 10px 0 50px rgba(0, 0, 0, 1);
+}
+
+#aco-summary-panel.open {
+    transform: translateX(0);
+}
+
+.panel-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.panel-close-btn:hover {
+    color: #fff;
+}
+
+.summary-header {
+    padding: 40px 20px 20px;
+    text-align: center;
+    border-bottom: 1px solid #333;
+}
+
+.summary-header h2 {
+    color: var(--aco-gold);
+    margin: 0;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+}
+
+.summary-content {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.summary-item {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 10px;
+}
+
+.sum-name {
+    color: #fff;
+    font-size: 1rem;
+}
+
+.sum-desc {
+    color: #888;
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+/* TOOLTIP */
+#aco-tooltip {
+    position: fixed;
+    background: rgba(5, 8, 12, 0.98);
+    border: 1px solid var(--aco-gold);
+    color: #fff;
+    padding: 15px;
+    width: 300px;
+    pointer-events: none;
+    z-index: 4000;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    display: none;
+    /* Asegurar oculto por defecto */
+}
+
+#aco-tooltip strong {
+    font-family: var(--aco-font);
+    color: var(--aco-gold);
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 5px;
+}
