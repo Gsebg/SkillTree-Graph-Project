@@ -216,6 +216,10 @@ function animateWheel() {
 // =========================================
 window.loadGameModule = function (gameId) {
 
+    const heroSection = document.getElementById('hero-section');
+    const carouselSection = document.getElementById('carousel-section');
+    if (heroSection) heroSection.style.display = 'none';
+    if (carouselSection) carouselSection.style.display = 'none';
     // Ocultar carrusel y mostrar loader si fuera necesario (lógica visual global)
     // ...
 
@@ -264,6 +268,29 @@ window.loadGameModule = function (gameId) {
             }
         });
 
+    } else if (gameId === 'skyrim') {
+        // --- BLOQUE SKYRIM ---
+        // 1. Cargar CSS
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'games/skyrim/skyrim.css';
+        link.id = 'skyrim-css';
+        document.head.appendChild(link);
+
+        // 2. Cargar Scripts
+        loadScriptsSequentially([
+            'games/skyrim/skills_data.js',   // Datos (Python)
+            'games/skyrim/layout_config.js', // Posiciones
+            'games/skyrim/skyrim.js'         // Lógica
+        ], () => {
+            if (typeof Skyrim_Module !== 'undefined') {
+                Skyrim_Module.init();
+            } else {
+                console.error("Error cargando Skyrim.");
+                if (window.restoreMainMenu) window.restoreMainMenu();
+            }
+        });
+
     } else {
         // Otros juegos (Skyrim, etc.)
         alert("En desarrollo... Próximamente.");
@@ -290,4 +317,13 @@ window.goBackToLauncher = function () {
     }
     const css = document.getElementById('cp2077-css');
     if (css) css.remove();
+};
+
+window.restoreMainMenu = function () {
+    const heroSection = document.getElementById('hero-section');
+    const carouselSection = document.getElementById('carousel-section');
+
+    // Restaurar visibilidad (quitamos el display:none que ponen los juegos)
+    if (heroSection) heroSection.style.display = '';
+    if (carouselSection) carouselSection.style.display = '';
 };

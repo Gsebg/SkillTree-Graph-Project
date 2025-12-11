@@ -235,9 +235,25 @@ const ACOrigins_Module = (function () {
         tt.classList.add('hidden');
     }
 
+    /* games/acorigins/acorigins.js */
+
     function destroy() {
-        if (container) { container.remove(); container = null; }
+        if (container) {
+            container.remove();
+            container = null;
+        }
+
+        // Eliminar CSS
+        const cssLink = document.getElementById('acorigins-css');
+        if (cssLink) cssLink.remove();
+
         isInitialized = false;
+
+        // --- AGREGAR ESTO: ---
+        // Restaurar el menú principal al salir
+        if (window.restoreMainMenu) {
+            window.restoreMainMenu();
+        }
     }
 
     return { init, destroy, toggleSummary, resetTree };

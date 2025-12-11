@@ -63,12 +63,25 @@ const CP2077_Module = (function () {
     }
 
     function destroy() {
-        if (!container) return;
-        window.removeEventListener('resize', handleResize);
-        container.remove(); // Elimina todo el HTML del juego del DOM
+        if (container) {
+            container.remove();
+            container = null;
+        }
+
+        // Eliminar CSS
+        const css = document.getElementById('cp2077-css');
+        if (css) css.remove();
+
+        // Limpiar tooltips si quedaron pegados
+        if (tooltip) tooltip.style.display = 'none';
+
+        // --- AGREGAR ESTO: ---
+        // Restaurar el menú principal al salir
+        if (window.restoreMainMenu) {
+            window.restoreMainMenu();
+        }
+
         isInitialized = false;
-        container = null;
-        console.log("CP2077 Module Destroyed.");
     }
 
     // =========================================

@@ -1,0 +1,339 @@
+/* games/skyrim/skyrim.css */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+:root {
+    --sky-text: #cccccc;
+    --sky-blue: #aaddff;
+    --sky-glow: #0088ff;
+    --sky-bg: radial-gradient(circle at bottom, #1a253a 0%, #090a0f 100%);
+}
+
+#skyrim-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--sky-bg);
+    z-index: 2000;
+    overflow: hidden;
+    font-family: 'Cinzel', serif;
+    color: var(--sky-text);
+    display: none;
+    user-select: none;
+    perspective: 1000px;
+}
+
+/* Fondo de Estrellas */
+#skyrim-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255, 255, 255, .1) 1px, transparent 2px);
+    background-size: 550px 550px, 250px 250px;
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* --- HUD SUPERIOR --- */
+#sky-hud-top {
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    text-align: center;
+    z-index: 100;
+    text-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+    pointer-events: none;
+}
+
+#sky-tree-title {
+    font-size: 3rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin: 0;
+}
+
+#sky-tree-desc {
+    font-size: 1rem;
+    color: #8ab;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* --- HUD INFERIOR --- */
+#sky-hud-bottom {
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.sky-stat {
+    text-align: center;
+}
+
+.sky-val {
+    font-size: 2.5rem;
+    color: #fff;
+    display: block;
+    font-weight: bold;
+}
+
+.sky-label {
+    font-size: 0.9rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* --- CONTROLES IZQUIERDA --- */
+#sky-controls {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+#sky-btn-exit,
+#sky-btn-menu {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #444;
+    color: #aaa;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    transition: 0.3s;
+    text-transform: uppercase;
+    pointer-events: auto;
+}
+
+#sky-btn-exit:hover,
+#sky-btn-menu:hover {
+    border-color: #fff;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* --- CARRUSEL 3D --- */
+#sky-carousel-stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 10;
+}
+
+.sky-constellation {
+    position: absolute;
+    width: 1000px;
+    height: 800px;
+    left: -500px;
+    top: -400px;
+    transform-style: preserve-3d;
+    opacity: 0.1;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+.sky-constellation.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sky-svg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+}
+
+/* --- NODOS (ESTRELLAS) --- */
+.sky-node {
+    position: absolute;
+    /* Hitbox grande invisible */
+    width: 40px;
+    height: 40px;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* La parte visual del nodo (el círculo interno) */
+.sky-node::after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.sky-node:hover::after {
+    transform: scale(1.6);
+}
+
+/* ESTADOS */
+/* Locked: Gris oscuro, apagado */
+.sky-node.state-locked::after {
+    background: #222;
+    border: 2px solid #444;
+}
+
+/* Available: Blanco, desbloqueable */
+.sky-node.state-available::after {
+    background: #000;
+    border: 2px solid #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Selected (Invested/Purchased): Azul Skyrim brillante */
+.sky-node.state-selected::after {
+    background: #fff;
+    /* Centro blanco */
+    border: 2px solid var(--sky-blue);
+    box-shadow: 0 0 15px var(--sky-blue), 0 0 30px var(--sky-glow);
+}
+
+/* Si tiene rango parcial (ej: 1/5) podemos usar un azul mas suave si quieres, pero usaremos el mismo estilo selected */
+
+/* --- TOOLTIP FLOTANTE --- */
+#sky-tooltip {
+    position: fixed;
+    width: 300px;
+    background: rgba(10, 15, 20, 0.95);
+    border: 1px solid #666;
+    padding: 15px;
+    color: #fff;
+    display: none;
+    z-index: 5000;
+    pointer-events: none;
+    /* Para que no interfiera con el mouse */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+#sky-tt-title {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--sky-blue);
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+#sky-tt-desc {
+    font-size: 0.9rem;
+    color: #ccc;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    font-family: sans-serif;
+}
+
+#sky-tt-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.sky-warn {
+    color: #f55;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+/* --- PANEL SUMARIO (Slide Out) --- */
+#sky-summary-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(10, 14, 20, 0.98);
+    border-right: 1px solid #444;
+    z-index: 3000;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
+}
+
+#sky-summary-panel.open {
+    transform: translateX(0);
+}
+
+.sky-sum-header {
+    padding: 30px 20px;
+    border-bottom: 1px solid #333;
+    text-align: center;
+}
+
+.sky-sum-header h2 {
+    margin: 0;
+    color: var(--sky-blue);
+}
+
+.sky-sum-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.sky-sum-item {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 5px;
+}
+
+.sky-sum-name {
+    font-size: 1rem;
+    color: #fff;
+}
+
+.sky-sum-rank {
+    font-size: 0.8rem;
+    color: var(--sky-blue);
+    float: right;
+}
+
+.sky-sum-desc {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 3px;
+    font-family: sans-serif;
+}
+
+.panel-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
