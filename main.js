@@ -326,4 +326,4 @@ window.restoreMainMenu = function () {
     // Restaurar visibilidad (quitamos el display:none que ponen los juegos)
     if (heroSection) heroSection.style.display = '';
     if (carouselSection) carouselSection.style.display = '';
-};
+}; 
